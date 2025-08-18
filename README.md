@@ -56,12 +56,12 @@ AWS Secret Access Key [None]: <your-secret-access-key>
 Default region name [None]: ap-south-1
 Default output format [None]: json
 ```
-Step 3 Verify CLI authentication
+### Step 3 Verify CLI authentication
 ```bash
 aws sts get-caller-identity
 
 ```
-### Step 1: Ensure pip is installed for Python 3.13
+### Step 4: Ensure pip is installed for Python
 ```bash
 py -3.11 -m ensurepip --upgrade
 py -3.11 -m pip install --upgrade pip
@@ -80,22 +80,21 @@ py -3.11 -c "import boto3; print(boto3.__version__)"
 
 ### 2.1 Containerize the MERN Application
 1. .env Files
-
-Create .env files inside each backend service directory.
-- backend/helloService/.env
-- backend/profileService/.env
+    Create .env files inside each backend service directory.
+    - backend/helloService/.env
+    - backend/profileService/.env
 
 2. Dockerfiles Containerization for This Project
-Create Dockerfiles inside each backend service and frontend.
-- backend/helloService/Dockerfile
-- backend/profileService/Dockerfile
-- frontend/Dockerfile
+    Create Dockerfiles inside each backend service and frontend.
+    - backend/helloService/Dockerfile
+    - backend/profileService/Dockerfile
+    - frontend/Dockerfile
 
 3. Docker Compose for Local Testing
-Inside root directory ce=reate docker-compose.yml for local tessting
+    Inside root directory ce=reate docker-compose.yml for local tessting
 
 4. Local Testing
-After preparing the .env files and Dockerfiles, test locally:
+    After preparing the .env files and Dockerfiles, test locally:
 ```bash
 docker-compose up --build
 ```
@@ -103,6 +102,7 @@ docker-compose up --build
  - HelloService: http://localhost:3001
  - ProfileService: http://localhost:3002
 
+#
 ### 2.2 Push Docker Images to Amazon ECR
 1. Build Docker Images Locally
 ``` bash
@@ -113,6 +113,7 @@ docker build -t profile-service:latest ./backend/profileService
 # Frontend
 docker build -t frontend:latest ./frontend
 ```
+
 2. Create ECR Repositories
 Run these AWS CLI commands (replace <aws-region> with your region, e.g. ap-south-1):
 ```bash
@@ -120,11 +121,13 @@ aws ecr create-repository --repository-name hello-service --region <aws-region>
 aws ecr create-repository --repository-name profile-service --region <aws-region>
 aws ecr create-repository --repository-name frontend --region <aws-region>
 ```
+
 4. Authenticate Docker to ECR
 ```bash
 aws ecr get-login-password --region <aws-region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<region>.amazonaws.com
 
 ```
+
 5. Tag Images for ECR
 Replace <aws_account_id> and <region> with your details:
 ```bash
@@ -133,6 +136,7 @@ docker tag profile-service:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.co
 docker tag frontend:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend:latest
 ```
 6. Push Images to ECR
+
 ```bash
 docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/hello-service:latest
 docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/profile-service:latest
@@ -147,4 +151,3 @@ docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend:latest
 aws codecommit create-repository --repository-name mern-microservices --repository-description "MERN microservices project V1" --region ap-south-1
 ```
 
-An error occurred (OperationNotAllowedException) when calling the CreateRepository operation: CreateRepository request is not allowed because there is no existing repository in this AWS account or AWS Organization
