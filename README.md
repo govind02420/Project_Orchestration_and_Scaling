@@ -1,47 +1,39 @@
-# Sample MERN with Microservices
+# MERN Microservices – Orchestration & Scaling
+This project demonstrates a microservices-based MERN stack application orchestrated with Docker Compose / Kubernetes, showcasing containerization, scaling, and inter-service communication.
 
-
-
-For `helloService`, create `.env` file with the content:
-```bash
-PORT=3001
-```
-
-For `profileService`, create `.env` file with the content:
-```bash
-PORT=3002
-MONGO_URL="specifyYourMongoURLHereWithDatabaseNameInTheEnd"
-```
-
-Finally install packages in both the services by running the command `npm install`.
-
-<br/>
-For frontend, you have to install and start the frontend server:
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-Note: This will run the frontend in the development server. To run in production, build the application by running the command `npm run build`
-######
-
+It includes:
+- Backend Services
+    - helloService – A simple Node.js service (Hello World).
+    - profileService – A Node.js + MongoDB service (manages user profiles).
+- Frontend
+    - React.js client for interacting with backend APIs.
+- Database
+    - MongoDB (for profile service).
+#
+## Project Structure
 ```bash
 MERN_Microservices/
- ├── backend/
- │   ├── helloService/
- │   │   ├── index.js
- │   │   ├── package.json
- │   ├── profileService/
- │       ├── index.js
- │       ├── package.json
- ├── frontend/
- │   ├── package.json
- │   ├── src/
- │   │   ├── App.js
- │   │   ├── components/Home.js
- ├── README.md
+│── backend/
+│   ├── helloService/
+│   │   ├── Dockerfile
+│   │   ├── index.js
+│   │   ├── package.json
+│   │   └── .env
+│   ├── profileService/
+│   │   ├── Dockerfile
+│   │   ├── index.js
+│   │   ├── package.json
+│   │   └── .env
+│
+│── frontend/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── src/
+│   ├── public/
+│   └── .env
+│
+│── docker-compose.yml
+└── README.md
 
 ```
 #
@@ -148,7 +140,11 @@ docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend:latest
 ```
 
 ## Step 3: Version Control with AWS CodeCommit
+**AWS has stopped allowing new customers to onboard to CodeCommit**
 
 1. Create a CodeCommit Repository
+```bash
+aws codecommit create-repository --repository-name mern-microservices --repository-description "MERN microservices project V1" --region ap-south-1
+```
 
-
+An error occurred (OperationNotAllowedException) when calling the CreateRepository operation: CreateRepository request is not allowed because there is no existing repository in this AWS account or AWS Organization
