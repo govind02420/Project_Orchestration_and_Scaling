@@ -17,8 +17,8 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    sh 'docker build -t hello-service ./helloService'
-                    sh 'docker build -t profile-service ./profileService'
+                    sh 'docker build -t hello-service ./backend/helloService'
+                    sh 'docker build -t profile-service ./backend/profileService'
                     sh 'docker build -t frontend ./frontend'
                 }
             }
