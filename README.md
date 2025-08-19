@@ -143,13 +143,10 @@ docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/profile-service:late
 docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend:latest
 ```
 
-## Step 3: Version Control with AWS CodeCommit
+## Step 3: Version Control with  GitHub
 **AWS has stopped allowing new customers to onboard to CodeCommit**
-Version Control with GitHub
-👉 https://github.com/govind02420/Project_Orchestration_and_Scaling.git
 
-1. Create a CodeCommit Repository
-```bash
-aws codecommit create-repository --repository-name mern-microservices --repository-description "MERN microservices project V1" --region ap-south-1
-```
 
+## Step 4: Continuous Integration with Jenkins
+
+### 4.1 Set Up Jenkins:
