@@ -145,6 +145,8 @@ docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend:latest
 
 ## Step 3: Version Control with AWS CodeCommit
 **AWS has stopped allowing new customers to onboard to CodeCommit**
+Version Control with GitHub
+👉 https://github.com/govind02420/Project_Orchestration_and_Scaling.git
 
 1. Create a CodeCommit Repository
 ```bash
