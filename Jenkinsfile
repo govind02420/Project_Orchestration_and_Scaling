@@ -38,44 +38,54 @@ pipeline {
             parallel {
                 stage('Hello Service') {
                     steps {
-                        withEnv(['DOCKER_BUILDKIT=1']) {
-                            sh """
-                              docker build -t hello-service:${GIT_SHORT} ./backend/helloService
-                              docker tag hello-service:${GIT_SHORT} $ECR_REGISTRY/hello-service:${GIT_SHORT}
-                              docker tag hello-service:${GIT_SHORT} $ECR_REGISTRY/hello-service:${IMAGE_TAG}
-                              docker push $ECR_REGISTRY/hello-service:${GIT_SHORT}
-                              docker push $ECR_REGISTRY/hello-service:${IMAGE_TAG}
-                            """
-                        }
+                        sh """
+                          docker buildx build --platform linux/amd64 \
+                            -t $ECR_REGISTRY/hello-service:${GIT_SHORT} \
+                            -t $ECR_REGISTRY/hello-service:${IMAGE_TAG} \
+                            --cache-from=type=registry,ref=$ECR_REGISTRY/hello-service:buildcache \
+                            --cache-to=type=registry,ref=$ECR_REGISTRY/hello-service:buildcache,mode=max \
+                            ./backend/helloService --push
+                        """
                     }
                 }
                 stage('Profile Service') {
                     steps {
-                        withEnv(['DOCKER_BUILDKIT=1']) {
-                            sh """
-                              docker build -t profile-service:${GIT_SHORT} ./backend/profileService
-                              docker tag profile-service:${GIT_SHORT} $ECR_REGISTRY/profile-service:${GIT_SHORT}
-                              docker tag profile-service:${GIT_SHORT} $ECR_REGISTRY/profile-service:${IMAGE_TAG}
-                              docker push $ECR_REGISTRY/profile-service:${GIT_SHORT}
-                              docker push $ECR_REGISTRY/profile-service:${IMAGE_TAG}
-                            """
-                        }
+                        sh """
+                          docker buildx build --platform linux/amd64 \
+                            -t $ECR_REGISTRY/profile-service:${GIT_SHORT} \
+                            -t $ECR_REGISTRY/profile-service:${IMAGE_TAG} \
+                            --cache-from=type=registry,ref=$ECR_REGISTRY/profile-service:buildcache \
+                            --cache-to=type=registry,ref=$ECR_REGISTRY/profile-service:buildcache,mode=max \
+                            ./backend/profileService --push
+                        """
                     }
                 }
                 stage('Frontend') {
                     steps {
-                        withEnv(['DOCKER_BUILDKIT=1']) {
-                            sh """
-                              docker build -t frontend:${GIT_SHORT} ./frontend
-                              docker tag frontend:${GIT_SHORT} $ECR_REGISTRY/frontend:${GIT_SHORT}
-                              docker tag frontend:${GIT_SHORT} $ECR_REGISTRY/frontend:${IMAGE_TAG}
-                              docker push $ECR_REGISTRY/frontend:${GIT_SHORT}
-                              docker push $ECR_REGISTRY/frontend:${IMAGE_TAG}
-                            """
-                        }
+                        sh """
+                          docker buildx build --platform linux/amd64 \
+                            -t $ECR_REGISTRY/frontend:${GIT_SHORT} \
+                            -t $ECR_REGISTRY/frontend:${IMAGE_TAG} \
+                            --cache-from=type=registry,ref=$ECR_REGISTRY/frontend:buildcache \
+                            --cache-to=type=registry,ref=$ECR_REGISTRY/frontend:buildcache,mode=max \
+                            ./frontend --push
+                        """
                     }
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo "Cleaning up Docker resources..."
+            sh "docker system prune -af || true"
+        }
+        success {
+            echo "✅ Build and Push completed successfully!"
+        }
+        failure {
+            echo "❌ Build failed. Check the logs."
         }
     }
 }
