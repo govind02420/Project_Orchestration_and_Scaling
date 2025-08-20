@@ -31,7 +31,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "8090:80"   # Changed from 8080 to 8090
+      - "8090:80"   
     depends_on:
       - hello-service
       - profile-service
