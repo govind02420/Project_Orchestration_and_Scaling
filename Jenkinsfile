@@ -42,8 +42,6 @@ pipeline {
                           docker buildx build --platform linux/amd64 \
                             -t $ECR_REGISTRY/hello-service:${GIT_SHORT} \
                             -t $ECR_REGISTRY/hello-service:${IMAGE_TAG} \
-                            --cache-from=type=registry,ref=$ECR_REGISTRY/hello-service:buildcache \
-                            --cache-to=type=registry,ref=$ECR_REGISTRY/hello-service:buildcache,mode=max \
                             ./backend/helloService --push
                         """
                     }
@@ -54,8 +52,6 @@ pipeline {
                           docker buildx build --platform linux/amd64 \
                             -t $ECR_REGISTRY/profile-service:${GIT_SHORT} \
                             -t $ECR_REGISTRY/profile-service:${IMAGE_TAG} \
-                            --cache-from=type=registry,ref=$ECR_REGISTRY/profile-service:buildcache \
-                            --cache-to=type=registry,ref=$ECR_REGISTRY/profile-service:buildcache,mode=max \
                             ./backend/profileService --push
                         """
                     }
@@ -66,8 +62,6 @@ pipeline {
                           docker buildx build --platform linux/amd64 \
                             -t $ECR_REGISTRY/frontend:${GIT_SHORT} \
                             -t $ECR_REGISTRY/frontend:${IMAGE_TAG} \
-                            --cache-from=type=registry,ref=$ECR_REGISTRY/frontend:buildcache \
-                            --cache-to=type=registry,ref=$ECR_REGISTRY/frontend:buildcache,mode=max \
                             ./frontend --push
                         """
                     }
