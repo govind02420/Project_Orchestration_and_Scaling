@@ -39,30 +39,30 @@ pipeline {
                 stage('Hello Service') {
                     steps {
                         sh """
-                          docker buildx build --platform linux/amd64 \
-                            -t $ECR_REGISTRY/hello-service:${GIT_SHORT} \
-                            -t $ECR_REGISTRY/hello-service:${IMAGE_TAG} \
-                            ./backend/helloService --push
+                          docker build -t $ECR_REGISTRY/hello-service:${GIT_SHORT} ./backend/helloService
+                          docker tag $ECR_REGISTRY/hello-service:${GIT_SHORT} $ECR_REGISTRY/hello-service:${IMAGE_TAG}
+                          docker push $ECR_REGISTRY/hello-service:${GIT_SHORT}
+                          docker push $ECR_REGISTRY/hello-service:${IMAGE_TAG}
                         """
                     }
                 }
                 stage('Profile Service') {
                     steps {
                         sh """
-                          docker buildx build --platform linux/amd64 \
-                            -t $ECR_REGISTRY/profile-service:${GIT_SHORT} \
-                            -t $ECR_REGISTRY/profile-service:${IMAGE_TAG} \
-                            ./backend/profileService --push
+                          docker build -t $ECR_REGISTRY/profile-service:${GIT_SHORT} ./backend/profileService
+                          docker tag $ECR_REGISTRY/profile-service:${GIT_SHORT} $ECR_REGISTRY/profile-service:${IMAGE_TAG}
+                          docker push $ECR_REGISTRY/profile-service:${GIT_SHORT}
+                          docker push $ECR_REGISTRY/profile-service:${IMAGE_TAG}
                         """
                     }
                 }
                 stage('Frontend') {
                     steps {
                         sh """
-                          docker buildx build --platform linux/amd64 \
-                            -t $ECR_REGISTRY/frontend:${GIT_SHORT} \
-                            -t $ECR_REGISTRY/frontend:${IMAGE_TAG} \
-                            ./frontend --push
+                          docker build -t $ECR_REGISTRY/frontend:${GIT_SHORT} ./frontend
+                          docker tag $ECR_REGISTRY/frontend:${GIT_SHORT} $ECR_REGISTRY/frontend:${IMAGE_TAG}
+                          docker push $ECR_REGISTRY/frontend:${GIT_SHORT}
+                          docker push $ECR_REGISTRY/frontend:${IMAGE_TAG}
                         """
                     }
                 }
