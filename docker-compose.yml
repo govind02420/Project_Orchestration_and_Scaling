@@ -1,40 +1,48 @@
-version: "3.8"
-services:
-  mongo:
-    image: mongo:6
-    container_name: mern_microservices-mongo   # renamed container
-    ports:
-      - "27017:27017"   # expose for local debugging
-    volumes:
-      - mongo-data:/data/db   # persist MongoDB data
+version: "3.9"
 
+services:
   hello-service:
     build: ./backend/helloService
+    container_name: hello-service
     ports:
       - "3001:3001"
-    env_file:
-      - ./backend/helloService/.env
-    depends_on:
-      - mongo
+    environment:
+      - PORT=3001
+    restart: always
 
   profile-service:
     build: ./backend/profileService
+    container_name: profile-service
     ports:
       - "3002:3002"
-    env_file:
-      - ./backend/profileService/.env
     environment:
-      - MONGO_URL=mongodb://mongo:27017/helloWorld   # 👈 still use "mongo" (service name), not container name
+      - PORT=3002
+      - MONGO_URL=mongodb://mongo:27017/profiledb
     depends_on:
       - mongo
+    restart: always
 
   frontend:
     build: ./frontend
+    container_name: frontend
     ports:
-      - "8090:80"   
+      - "3000:3000"
+    environment:
+      - REACT_APP_HELLO_API=http://localhost:3001
+      - REACT_APP_PROFILE_API=http://localhost:3002
     depends_on:
       - hello-service
       - profile-service
+    restart: always
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
 
 volumes:
-  mongo-data:
+  mongo_data:
