@@ -148,7 +148,7 @@ docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend:latest
 #
 ## Continuous Integration with Jenkins
 
-### 4.1 — Set Up Jenkins on EC2
+### Set Up Jenkins on EC2
 - Jenkins able to run Docker builds and push to ECR (via IAM Role)
 - GitHub webhook-ready
 
@@ -222,7 +222,7 @@ In GitHub: Repo → Settings → Webhooks → Add webhook
 - Security Group: Ensure port 8080 is open to GitHub (0.0.0.0/0 is fine temporarily)
 
 
-### Step 4.2 — Create Jenkins Pipeline Job
+### Create Jenkins Pipeline Job
 1) Create Pipeline Job
 
 On Jenkins dashboard → New Item.
